@@ -11,6 +11,7 @@ SOURCES += \
 HEADERS += \
     configurable.h \
     configuration.h \
+    configurationreader.h \
     filewebserver.h \
     datamodel.h \
     filesystemmodel.h \
