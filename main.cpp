@@ -9,12 +9,13 @@
 int main()
 {
     FileWebServer server;
+    server.run();
 
     //ConfiguratioReader reader;
 
     //Configuration c = reader.configuration();
 
-    FileSystemModel fileSystemModel;
+//    FileSystemModel fileSystemModel;
 
     std::cout << "Hello World!" << std::endl;
     return 0;
