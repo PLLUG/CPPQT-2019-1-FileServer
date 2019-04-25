@@ -1,0 +1,9 @@
+Here we have all files in our directory!
+
+Directory path: {{path}}
+
+Files:
+
+{{#files}}
+{{filename}}
+{{/files}}
