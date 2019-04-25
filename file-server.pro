@@ -6,6 +6,8 @@ CONFIG -= qt
 
 SOURCES += \
         configuration.cpp \
+        dataview.cpp \
+        filesystemmodel.cpp \
         filewebserver.cpp \
         httpconnection.cpp \
         main.cpp
