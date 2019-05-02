@@ -5,6 +5,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        commandlinereader.cpp \
         configuration.cpp \
         dataview.cpp \
         filesystemmodel.cpp \
@@ -13,6 +14,7 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    commandlinereader.h \
     configurable.h \
     configuration.h \
     configurationreader.h \
@@ -32,6 +34,7 @@ CONFIG(debug, debug|release) {
 LIBS += \
     -lboost_system-mt \
     -lboost_program_options-mt \
+    -lstdc++fs
 }
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG

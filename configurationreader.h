@@ -8,7 +8,7 @@ class ConfigurationReader
 public:
     virtual Configuration configuration() = 0;
 
-    virtual ~ConfigurationReader() = 0;
+    virtual ~ConfigurationReader() =default;
 };
 
 #endif // CONFIGURATIOREADER_H

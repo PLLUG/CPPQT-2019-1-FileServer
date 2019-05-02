@@ -6,7 +6,7 @@
 class DataModel
 {
 public:
-    ~DataModel();
+    virtual ~DataModel() =default;
 
     virtual int count() const = 0;
 

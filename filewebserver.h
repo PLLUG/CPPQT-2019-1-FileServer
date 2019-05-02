@@ -15,9 +15,9 @@ public:
     virtual void setConfiguration(Configuration configuration) override;
 
 private:
-    const std::string defaultIP = "127.0.0.1";
-    const unsigned defaultPort = 8080;
-    std::string defaultPath = "d://";
+    std::string mServerIP = "127.0.0.1";
+    unsigned mPort = 8080;
+    std::string mPath = "d://";
 };
 
 

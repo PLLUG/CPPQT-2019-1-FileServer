@@ -40,17 +40,17 @@ int FileWebServer::run()
     {
         try
         {
-            auto const address = boost::asio::ip::make_address(defaultIP);
+            auto const address = boost::asio::ip::make_address(mServerIP);
 
             boost::asio::io_context ioc{1};
 
             boost::asio::ip::tcp::acceptor acceptor{ioc, {address,
-                                                          static_cast<unsigned short>(defaultPort)}};
+                                                          static_cast<unsigned short>(mPort)}};
             boost::asio::ip::tcp::socket socket{ioc};
 
-            std::cout << "Server started on " << defaultIP << ":" << defaultPort <<std::endl;
-            std::cout << "Working directory is a " << defaultPath <<std::endl;
-            http_server(acceptor, socket, defaultPath);
+            std::cout << "Server started on " << mServerIP << ":" << mPort <<std::endl;
+            std::cout << "Working directory is a " << mPath <<std::endl;
+            http_server(acceptor, socket, mPath);
             ioc.run();
         }
         catch (std::exception& e)
@@ -69,8 +69,9 @@ int FileWebServer::run()
     return SUCCESS;
 }
 
-void FileWebServer::setConfiguration(Configuration /*configuration*/)
+void FileWebServer::setConfiguration(Configuration config)
 {
-    ///
+    mPath = config.dir();
+    mPort = static_cast<unsigned>(config.port());
 }
 
