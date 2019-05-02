@@ -6,10 +6,12 @@
 #include "filesystemmodel.h"
 #include "configurationreader.h"
 #include "commandlinereader.h"
+#include "boost/program_options.hpp"
 
-int main()
+using namespace std;
+int main(int ac, char ** av)
 {
-    CommandLineReader reader;
+    CommandLineReader reader(ac,av);
     Configuration config = reader.configuration();
     FileWebServer server;
     server.setConfiguration(config);
@@ -22,4 +24,6 @@ int main()
 
     std::cout << "Hello World!" << std::endl;
     return 0;
+
+
 }
