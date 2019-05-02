@@ -10,10 +10,13 @@ SOURCES += \
         dataview.cpp \
         filesystemmodel.cpp \
         filewebserver.cpp \
+        htmlcontengenerator.cpp \
         httpconnection.cpp \
         main.cpp
 
 HEADERS += \
+    Mustache/catch.hpp \
+    Mustache/mustache.hpp \
     commandlinereader.h \
     configurable.h \
     configuration.h \
