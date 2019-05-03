@@ -6,7 +6,8 @@
 class FileWebServer : public Configurable
 {
 public:
-    virtual ~FileWebServer();
+    FileWebServer();
+    virtual ~FileWebServer() override;
 
     int run();
 
@@ -15,10 +16,9 @@ public:
     virtual void setConfiguration(Configuration configuration) override;
 
 private:
-    std::string mServerIP = "127.0.0.1";
-    unsigned mPort = 8080;
-    std::string mPath = "d://";
+    std::string mServerIP;
+    unsigned mPort;
+    std::string mPath;
 };
-
 
 #endif // FILEWEBSERVER_H

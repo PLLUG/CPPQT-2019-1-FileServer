@@ -6,15 +6,13 @@ class DataModel;
 class DataView
 {
 public:
+    DataView();
+
     DataModel *model() const;
     void setModel(DataModel *model);
 
 private:
-    DataModel *mModel = nullptr;
+    DataModel *mModel;
 };
 
 #endif // DATAVIEW_H
-
-
-
-

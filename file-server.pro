@@ -5,14 +5,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        commandlinereader.cpp \
-        configuration.cpp \
-        dataview.cpp \
-        filesystemmodel.cpp \
-        filewebserver.cpp \
-        htmlcontengenerator.cpp \
-        httpconnection.cpp \
-        main.cpp
+    commandlinereader.cpp \
+    configuration.cpp \
+    dataview.cpp \
+    filesystemmodel.cpp \
+    filewebserver.cpp \
+    htmlcontengenerator.cpp \
+    httpconnection.cpp \
+    main.cpp
 
 HEADERS += \
     Mustache/catch.hpp \
