@@ -7,11 +7,13 @@
 class HTMLContentGenerator : public Generator, public Configurable
 {
 public:
-  std::string generate(const std::string &path);
+  ~HTMLContentGenerator() override;
+  std::string generate(const std::string &path) override;
 
   // Configurable interface
 public:
   virtual void setConfiguration(Configuration configuration) override;
+
 };
 
 #endif // HTMLCONTENTGENERATOR_H

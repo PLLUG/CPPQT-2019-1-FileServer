@@ -1,5 +1,57 @@
 #include "httpconnection.h"
 
+static std::string mustasheTemplate{R"(<!DOCTYPE html>
+                             <html>
+
+                             <head>
+                             <title>FileServer</title>
+                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                             </head>
+
+                             <body>
+                             <p>&nbsp;</p>
+                             <h1>File Server</h1>
+                             <p>&nbsp;</p>
+                             <p>&nbsp;</p>
+
+                             <table style="width:100%">
+                             <tbody>
+                             <tr>
+                             {{#showIcons}}
+                             <td>&nbsp;</td>
+                             {{/showIcons}}
+                             <td><strong>Name</strong></td>
+                             {{#showSize}}
+                             <td><strong>Size</strong></td>
+                             {{/showSize}}
+                             {{#showDetails}}
+                             <td><strong>Information</strong></td>
+                             {{/showDetails}}
+                             </tr>
+
+                             {{#dirEntryList}}
+                             <tr>
+                             {{#showIcons}}
+                             <td>{{{fileIcon}}}</td>
+                             {{/showIcons}}
+                             <td>{{fileName}}</td>
+                             {{#showSize}}
+                             <td>{{fileSize}}</td>
+                             {{/showSize}}
+                             {{#showDetails}}
+                             <td>{{fileDetails}}</td>
+                             {{/showDetails}}
+                             </tr>
+                             {{/dirEntryList}}
+                             </tbody>
+                             </table>
+
+                             <p>&nbsp;</p>
+                             </body>
+                             </html>
+                             )"};
+
+
 http_connection::http_connection(boost::asio::ip::tcp::socket socket, const std::string &response_html)
     : response(response_html)
     , socket_(std::move(socket))
@@ -47,6 +99,7 @@ void http_connection::process_request()
         response_.set(boost::beast::http::field::server, "Beast");
         create_response();
         break;
+
     default:
         // We return responses indicating an error if
         // we do not recognize the request method.
@@ -96,10 +149,9 @@ void http_connection::create_response()
         else
         {
             response_.result(boost::beast::http::status::not_found);
-            response_.set(boost::beast::http::field::content_type, "text/plain");
-            boost::beast::ostream(response_.body()) << "File not found\r\n";
+            response_.set(boost::beast::http::field::content_type, "text/html");
+            boost::beast::ostream(response_.body()) << response.c_str(); //"File not found\r\n";
         }
-
 
     //                <<  "<html><head><title>Boost.Asio HTTP server example</title></head>"
     //                 <<  "<body><h1>Hello, world!</h1></body></html>";

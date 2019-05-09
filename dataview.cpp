@@ -7,5 +7,8 @@ DataModel *DataView::model() const
 
 void DataView::setModel(DataModel *model)
 {
-    mModel = model;
+    if(model && mModel != model)
+    {
+        mModel = model;
+    }
 }

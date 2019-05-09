@@ -4,7 +4,7 @@
 
 void FileSystemModel::setConfiguration(Configuration configuration)
 {
-
+    setRootDir(configuration.dir());
 }
 
 int FileSystemModel::count() const
