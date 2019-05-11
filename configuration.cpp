@@ -1,5 +1,25 @@
 #include "configuration.h"
 
+Configuration::Configuration()
+    : mPort{8080}
+    ,mIsIconColumnVisible{false}
+    ,mIsFileSizeColumnVisible{false}
+    ,mIsFileDownloadingEnabled{false}
+    ,mFsizeDisplayingMode{FSizeEnum::BYTES}
+    ,mIsDetailedInfoColumnVisible{false}
+{
+}
+
+void Configuration::setPort(int port)
+{
+    mPort = port;
+}
+
+int Configuration::port() const
+{
+    return mPort;
+}
+
 std::string Configuration::dir() const
 {
     return mDir;
@@ -60,19 +80,3 @@ void Configuration::setIsDetailedInfoColumnVisible(bool isDetailedInfoColumnVisi
 {
     mIsDetailedInfoColumnVisible = isDetailedInfoColumnVisible;
 }
-
-Configuration::Configuration()
-{
-
-}
-
-void Configuration::setPort(int port)
-{
-    mPort = port;
-}
-
-int Configuration::port() const
-{
-    return mPort;
-}
-

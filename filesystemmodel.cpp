@@ -19,7 +19,7 @@ std::string FileSystemModel::name(int index) const
 
 int FileSystemModel::size(int index) const
 {
-    ///
+    return index;
 }
 
 bool FileSystemModel::isDir(int index) const

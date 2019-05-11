@@ -8,7 +8,8 @@ class Generator;
 class FileWebServer : public Configurable
 {
 public:
-    virtual ~FileWebServer();
+    FileWebServer();
+    virtual ~FileWebServer() override;
 
     int run();
 
@@ -18,11 +19,10 @@ public:
 
     void setGenerator(Generator *generator);
 private:
-    std::string mServerIP = "127.0.0.1";
-    unsigned mPort = 8080;
-    std::string mPath = "d://";
-    Generator *mGenerator = nullptr;
+    Generator *mGenerator;
+    std::string mServerIP;
+    unsigned mPort;
+    std::string mPath;
 };
-
 
 #endif // FILEWEBSERVER_H

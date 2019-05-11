@@ -1,5 +1,10 @@
 #include "dataview.h"
 
+DataView::DataView()
+    : mModel{nullptr}
+{
+}
+
 DataModel *DataView::model() const
 {
     return mModel;

@@ -2,18 +2,19 @@
 #define CONFIGURATION_H
 
 #include <string>
+
 #include "fsizeenum.h"
 
 class Configuration
 {
 private:
-    int mPort = 8080;
+    int mPort;
     std::string mDir;
-    bool mIsFileDownloadingEnabled = false;
-    FSizeEnum mFsizeDisplayingMode = FSizeEnum::BYTES;
-    bool mIsIconColumnVisible = false;
-    bool mIsFileSizeColumnVisible = false;
-    bool mIsDetailedInfoColumnVisible = false;
+    bool mIsIconColumnVisible;
+    bool mIsFileSizeColumnVisible;
+    bool mIsFileDownloadingEnabled;
+    FSizeEnum mFsizeDisplayingMode;
+    bool mIsDetailedInfoColumnVisible;
 
 public:
     Configuration();
@@ -44,5 +45,3 @@ public:
 };
 
 #endif // CONFIGURATION_H
-
-

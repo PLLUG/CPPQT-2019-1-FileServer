@@ -52,9 +52,12 @@ static std::string mustasheTemplate{R"(<!DOCTYPE html>
                              )"};
 
 
-http_connection::http_connection(boost::asio::ip::tcp::socket socket, const std::string &response_html)
+http_connection::http_connection(boost::asio::ip::tcp::socket socket,
+                                 const std::string &response_html)
     : response(response_html)
-    , socket_(std::move(socket))
+    ,socket_(std::move(socket))
+    ,buffer_{8192}
+    ,deadline_{socket_.get_executor(), std::chrono::seconds(60)}
 {
 }
 
@@ -117,44 +120,40 @@ void http_connection::process_request()
 
 void http_connection::create_response()
 {
-
-        if(request_.target() == "/count")
-        {
-            response_.set(boost::beast::http::field::content_type, "text/html");
-            boost::beast::ostream(response_.body())
-                    << "<html>\n"
-                    <<  "<head><title>Request count</title></head>\n"
-                     <<  "<body>\n"
-                      <<  "<h1>Request count</h1>\n"
-                       <<  "<p>There have been "
-                        <<  ""
-                         <<  " requests so far.</p>\n"
-                          <<  "</body>\n"
-                           <<  "</html>\n";
-        }
-        else if(request_.target() == "/time")
-        {
-            response_.set(boost::beast::http::field::content_type, "text/html");
-            boost::beast::ostream(response_.body())
-                    <<  "<html>\n"
-                     <<  "<head><title>Current time</title></head>\n"
-                      <<  "<body>\n"
-                       <<  "<h1>Current time</h1>\n"
-                        <<  "<p>The current time is "
-                         <<  "18 00"
-                          <<  " seconds since the epoch.</p>\n"
-                           <<  "</body>\n"
-                            <<  "</html>\n";
-        }
-        else
-        {
-            response_.result(boost::beast::http::status::not_found);
-            response_.set(boost::beast::http::field::content_type, "text/html");
-            boost::beast::ostream(response_.body()) << response.c_str(); //"File not found\r\n";
-        }
-
-    //                <<  "<html><head><title>Boost.Asio HTTP server example</title></head>"
-    //                 <<  "<body><h1>Hello, world!</h1></body></html>";
+    if(request_.target() == "/count")
+    {
+        response_.set(boost::beast::http::field::content_type, "text/html");
+        boost::beast::ostream(response_.body())
+                << "<html>\n"
+                <<  "<head><title>Request count</title></head>\n"
+                 <<  "<body>\n"
+                  <<  "<h1>Request count</h1>\n"
+                   <<  "<p>There have been "
+                    <<  ""
+                     <<  " requests so far.</p>\n"
+                      <<  "</body>\n"
+                       <<  "</html>\n";
+    }
+    else if(request_.target() == "/time")
+    {
+        response_.set(boost::beast::http::field::content_type, "text/html");
+        boost::beast::ostream(response_.body())
+                <<  "<html>\n"
+                 <<  "<head><title>Current time</title></head>\n"
+                  <<  "<body>\n"
+                   <<  "<h1>Current time</h1>\n"
+                    <<  "<p>The current time is "
+                     <<  "18 00"
+                      <<  " seconds since the epoch.</p>\n"
+                       <<  "</body>\n"
+                        <<  "</html>\n";
+    }
+    else
+    {
+        response_.result(boost::beast::http::status::not_found);
+        response_.set(boost::beast::http::field::content_type, "text/html");
+        boost::beast::ostream(response_.body()) << response.c_str(); //"File not found\r\n";
+    }
 }
 
 void http_connection::write_response()

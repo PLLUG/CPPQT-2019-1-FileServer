@@ -2,6 +2,7 @@
 #define COMMANDLINEREADER_H
 
 #include "configurationreader.h"
+
 class CommandLineReader : public ConfigurationReader
 {
 public:
@@ -10,9 +11,9 @@ public:
     // ConfigurationReader interface
 public:
     virtual Configuration configuration() override;
+
 private:
     Configuration mConfig;
-
 };
 
 #endif // COMMANDLINEREADER_H
