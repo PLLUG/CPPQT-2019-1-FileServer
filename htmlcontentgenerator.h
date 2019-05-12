@@ -6,13 +6,18 @@
 
 class HTMLContentGenerator : public Generator, public Configurable
 {
-public:
-  ~HTMLContentGenerator() override;
-  std::string generate(const std::string &path) override;
+private:
+    bool mShowIconsColumn;
+    bool mShowSizeColumn;
+    bool mShowDetailsConst;
 
-  // Configurable interface
 public:
-  virtual void setConfiguration(Configuration configuration) override;
+    ~HTMLContentGenerator() override;
+    std::string generate(const std::string &path) override;
+
+    // Configurable interface
+public:
+    virtual void setConfiguration(Configuration configuration) override;
 
 };
 

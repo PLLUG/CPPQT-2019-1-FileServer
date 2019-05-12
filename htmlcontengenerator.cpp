@@ -6,57 +6,6 @@
 //Configuration hTMLGenerator;
 //DataModel item1;
 
-//static std::string mustasheTemplate{R"(<!DOCTYPE html>
-//                             <html>
-
-//                             <head>
-//                             <title>FileServer</title>
-//                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-//                             </head>
-
-//                             <body>
-//                             <p>&nbsp;</p>
-//                             <h1>File Server</h1>
-//                             <p>&nbsp;</p>
-//                             <p>&nbsp;</p>
-
-//                             <table style="width:100%">
-//                             <tbody>
-//                             <tr>
-//                             {{#showIcons}}
-//                             <td>&nbsp;</td>
-//                             {{/showIcons}}
-//                             <td><strong>Name</strong></td>
-//                             {{#showSize}}
-//                             <td><strong>Size</strong></td>
-//                             {{/showSize}}
-//                             {{#showDetails}}
-//                             <td><strong>Information</strong></td>
-//                             {{/showDetails}}
-//                             </tr>
-
-//                             {{#dirEntryList}}
-//                             <tr>
-//                             {{#showIcons}}
-//                             <td>{{{fileIcon}}}</td>
-//                             {{/showIcons}}
-//                             <td>{{fileName}}</td>
-//                             {{#showSize}}
-//                             <td>{{fileSize}}</td>
-//                             {{/showSize}}
-//                             {{#showDetails}}
-//                             <td>{{fileDetails}}</td>
-//                             {{/showDetails}}
-//                             </tr>
-//                             {{/dirEntryList}}
-//                             </tbody>
-//                             </table>
-
-//                             <p>&nbsp;</p>
-//                             </body>
-//                             </html>
-//                             )"};
-
 struct FileSystemItems
 {
     std::string name;
@@ -111,15 +60,16 @@ std::string HTMLContentGenerator::generate(const std::string &path)
          }
     }
 
-    const bool showIconsColumn = true, showSizeColumn = true, showDetailsConst = true;
+    //const bool mShowIconsColumn = true, mShowSizeColumn = true, mShowDetailsConst = true;
     kainjow::mustache::mustache tmpl{mustasheTemplate};
 
     kainjow::mustache::data mustashe{};
-    mustashe.set("showIcons", showIconsColumn ? kainjow::mustache::data::type::bool_true
+
+    mustashe.set("showIcons", mShowIconsColumn ? kainjow::mustache::data::type::bool_true
                                               : kainjow::mustache::data::type::bool_false);
-    mustashe.set("showSize", showSizeColumn ? kainjow::mustache::data::type::bool_true
+    mustashe.set("showSize", mShowSizeColumn ? kainjow::mustache::data::type::bool_true
                                             : kainjow::mustache::data::type::bool_false);
-    mustashe.set("showDetails", showDetailsConst ? kainjow::mustache::data::type::bool_true
+    mustashe.set("showDetails", mShowDetailsConst ? kainjow::mustache::data::type::bool_true
                                                  : kainjow::mustache::data::type::bool_false);
 
 
@@ -133,11 +83,11 @@ std::string HTMLContentGenerator::generate(const std::string &path)
     {
         kainjow::mustache::data dirEntryMustashe;
 
-        dirEntryMustashe.set("showIcons", showIconsColumn ? kainjow::mustache::data::type::bool_true
+        dirEntryMustashe.set("showIcons", mShowIconsColumn ? kainjow::mustache::data::type::bool_true
                                                           : kainjow::mustache::data::type::bool_false);
 
         // File Icon
-        if (showIconsColumn)
+        if (mShowIconsColumn)
         {
             dirEntryMustashe.set("showIcons", kainjow::mustache::data::type::bool_true);
 
@@ -166,7 +116,7 @@ std::string HTMLContentGenerator::generate(const std::string &path)
         dirEntryMustashe.set("fileName", model()->name(fileIndex));
 
         // File Size
-        if (showSizeColumn)
+        if (mShowSizeColumn)
         {
             dirEntryMustashe.set("showSize", kainjow::mustache::data::type::bool_true);
 
@@ -185,7 +135,7 @@ std::string HTMLContentGenerator::generate(const std::string &path)
         }
 
         // File details
-        if (showDetailsConst)
+        if (mShowDetailsConst)
         {
             dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_true);
 
@@ -214,5 +164,7 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
 void HTMLContentGenerator::setConfiguration(Configuration configuration)
 {
-
+    mShowSizeColumn=configuration.isFileSizeColumnVisible();
+    mShowIconsColumn=configuration.isIconColumnVisible();
+    mShowDetailsConst=configuration.isDetailedInfoColumnVisible();
 }
