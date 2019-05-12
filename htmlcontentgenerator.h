@@ -3,6 +3,7 @@
 
 #include "configurable.h"
 #include "generator.h"
+#include "fsizeenum.h"
 
 class HTMLContentGenerator : public Generator, public Configurable
 {
@@ -10,6 +11,7 @@ private:
     bool mShowIconsColumn;
     bool mShowSizeColumn;
     bool mShowDetailsConst;
+    FSizeEnum mFSizeDisplayMode;
 
 public:
     ~HTMLContentGenerator() override;

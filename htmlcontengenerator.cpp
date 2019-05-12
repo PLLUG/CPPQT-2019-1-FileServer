@@ -122,7 +122,51 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
             if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
             {
-                dirEntryMustashe.set("fileSize", "1 K");
+                int fileSize;
+                fileSize = model()->size(fileIndex);
+                int ab;
+//                ab=fileSize/1024;
+//                std::cout<<"file Index"<<fileIndex<<": "<<(fileSize/1024)<<"  "<<ab<<   std::endl;
+
+                std::string sizeFileString;
+                if (FSizeEnum::BYTES==mFSizeDisplayMode || FSizeEnum::AUTOMATICALLY==mFSizeDisplayMode)
+                {
+                    sizeFileString = std::to_string(fileSize)+" b";
+                }
+                else
+                    if (FSizeEnum::KILOBYTES==mFSizeDisplayMode)
+                    {
+                        if((fileSize/1024)>0)
+                        {
+                            sizeFileString= std::to_string(fileSize/1024)+" Kb";
+
+                        }
+                        else
+                        {
+                            sizeFileString= std::to_string(fileSize)+" b";
+                        }
+                    }
+                if (FSizeEnum::MEGABYTES==mFSizeDisplayMode)
+                {
+                    if((fileSize/1048576)>0)
+                    {
+                        sizeFileString= std::to_string(fileSize/1048576)+" Mb";
+                    }
+                    else
+                    {
+                        if((fileSize/1024)>0)
+                        {
+                            sizeFileString= std::to_string(fileSize/1024)+" Kb";
+                        }
+                        else
+                        {
+                            sizeFileString= std::to_string(fileSize)+" b";
+                        }
+                    }
+                }
+               // sizeFileString= std::to_string(fileSize);
+                //std::cout<<d<<std::endl;
+                dirEntryMustashe.set("fileSize", sizeFileString);
             }
             else
             {
@@ -167,4 +211,5 @@ void HTMLContentGenerator::setConfiguration(Configuration configuration)
     mShowSizeColumn=configuration.isFileSizeColumnVisible();
     mShowIconsColumn=configuration.isIconColumnVisible();
     mShowDetailsConst=configuration.isDetailedInfoColumnVisible();
+    mFSizeDisplayMode=configuration.fsizeDisplayingMode();
 }

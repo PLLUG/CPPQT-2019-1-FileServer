@@ -19,7 +19,8 @@ std::string FileSystemModel::name(int index) const
 
 int FileSystemModel::size(int index) const
 {
-    return index;
+    std::filesystem::path fsPath = mListFilePathes.at(index);
+    return std::filesystem::file_size(fsPath);
 }
 
 bool FileSystemModel::isDir(int index) const
