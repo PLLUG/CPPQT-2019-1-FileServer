@@ -1,60 +1,61 @@
 #include "htmlcontentgenerator.h"
 #include "filesystemmodel.h"
 #include <Mustache\mustache.hpp>
+#include <fstream>
 
 //Configuration hTMLGenerator;
 //DataModel item1;
 
-static std::string mustasheTemplate{R"(<!DOCTYPE html>
-                             <html>
+//static std::string mustasheTemplate{R"(<!DOCTYPE html>
+//                             <html>
 
-                             <head>
-                             <title>FileServer</title>
-                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                             </head>
+//                             <head>
+//                             <title>FileServer</title>
+//                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+//                             </head>
 
-                             <body>
-                             <p>&nbsp;</p>
-                             <h1>File Server</h1>
-                             <p>&nbsp;</p>
-                             <p>&nbsp;</p>
+//                             <body>
+//                             <p>&nbsp;</p>
+//                             <h1>File Server</h1>
+//                             <p>&nbsp;</p>
+//                             <p>&nbsp;</p>
 
-                             <table style="width:100%">
-                             <tbody>
-                             <tr>
-                             {{#showIcons}}
-                             <td>&nbsp;</td>
-                             {{/showIcons}}
-                             <td><strong>Name</strong></td>
-                             {{#showSize}}
-                             <td><strong>Size</strong></td>
-                             {{/showSize}}
-                             {{#showDetails}}
-                             <td><strong>Information</strong></td>
-                             {{/showDetails}}
-                             </tr>
+//                             <table style="width:100%">
+//                             <tbody>
+//                             <tr>
+//                             {{#showIcons}}
+//                             <td>&nbsp;</td>
+//                             {{/showIcons}}
+//                             <td><strong>Name</strong></td>
+//                             {{#showSize}}
+//                             <td><strong>Size</strong></td>
+//                             {{/showSize}}
+//                             {{#showDetails}}
+//                             <td><strong>Information</strong></td>
+//                             {{/showDetails}}
+//                             </tr>
 
-                             {{#dirEntryList}}
-                             <tr>
-                             {{#showIcons}}
-                             <td>{{{fileIcon}}}</td>
-                             {{/showIcons}}
-                             <td>{{fileName}}</td>
-                             {{#showSize}}
-                             <td>{{fileSize}}</td>
-                             {{/showSize}}
-                             {{#showDetails}}
-                             <td>{{fileDetails}}</td>
-                             {{/showDetails}}
-                             </tr>
-                             {{/dirEntryList}}
-                             </tbody>
-                             </table>
+//                             {{#dirEntryList}}
+//                             <tr>
+//                             {{#showIcons}}
+//                             <td>{{{fileIcon}}}</td>
+//                             {{/showIcons}}
+//                             <td>{{fileName}}</td>
+//                             {{#showSize}}
+//                             <td>{{fileSize}}</td>
+//                             {{/showSize}}
+//                             {{#showDetails}}
+//                             <td>{{fileDetails}}</td>
+//                             {{/showDetails}}
+//                             </tr>
+//                             {{/dirEntryList}}
+//                             </tbody>
+//                             </table>
 
-                             <p>&nbsp;</p>
-                             </body>
-                             </html>
-                             )"};
+//                             <p>&nbsp;</p>
+//                             </body>
+//                             </html>
+//                             )"};
 
 struct FileSystemItems
 {
@@ -91,6 +92,25 @@ HTMLContentGenerator::~HTMLContentGenerator()
 std::string HTMLContentGenerator::generate(const std::string &path)
 {
     //return mustasheTemplate;
+
+    std::string mustasheTemplate{""};
+    std::ifstream templateFile;
+
+    templateFile.open("./template.html");
+    if(!templateFile.is_open())
+    {
+        std::cout<<"file \"template.html\" not found"<<std::endl;
+    }
+    else
+    {
+        std::string fileLine;
+        while (!templateFile.eof())
+         {
+             std::getline(templateFile, fileLine);
+             mustasheTemplate+=fileLine;
+         }
+    }
+
     const bool showIconsColumn = true, showSizeColumn = true, showDetailsConst = true;
     kainjow::mustache::mustache tmpl{mustasheTemplate};
 

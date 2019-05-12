@@ -23,7 +23,6 @@ CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
         ("config", boost::program_options::value<std::string>(), "Read options from config file config.cfg")
         ;
 
-
     boost::program_options::variables_map vm, vm1;
 
     try {
@@ -71,13 +70,11 @@ CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
 
     if (vm.count("port"))
     {
-        std::cout<<"Port: "<<vm["port"].as<int>()<<std::endl;
         mConfig.setPort(vm["port"].as<int>());
     }
 
     if(vm.count("fsize"))
     {
-        std::cout<<"fsize kurva: "<<vm["fsize"].as<std::string>()<<std::endl;
         if("BYTES"==vm["fsize"].as<std::string>())
         {
             mConfig.setFsizeDisplayingMode(FSizeEnum::BYTES);
@@ -99,34 +96,28 @@ CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
 
     if (vm.count("dir"))
     {
-        std::cout<<"Dir: "<<vm["dir"].as<std::string>()<<std::endl;
         mConfig.setDir(vm["dir"].as<std::string>());
     }
 
     if(vm.count("dpermission"))
     {
-        std::cout<<"dpermission "<<vm["dpermission"].as<bool>()<<std::endl;
         mConfig.setIsFileDownloadingEnabled(vm["dpermission"].as<bool>());
     }
 
     if(vm.count("vicon"))
     {
-        std::cout<<"vicon "<<vm["vicon"].as<bool>()<<std::endl;
         mConfig.setIsIconColumnVisible(vm["vicon"].as<bool>());
     }
 
     if(vm.count("vsize"))
     {
-        std::cout<<"vsize "<<vm["vsize"].as<bool>()<<std::endl;
         mConfig.setIsFileSizeColumnVisible(vm["vsize"].as<bool>());
     }
 
     if(vm.count("vinfo"))
     {
-        std::cout<<"vinfo "<<vm["vinfo"].as<bool>()<<std::endl;
         mConfig.setIsDetailedInfoColumnVisible(vm["vinfo"].as<bool>());
     }
-
 
    }
    catch(std::exception& ex)
