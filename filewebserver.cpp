@@ -1,5 +1,6 @@
 #include "httpconnection.h"
 #include "filewebserver.h"
+#include "generator.h"
 
 #include <boost/beast/version.hpp>
 #include <boost/beast/core.hpp>
@@ -16,9 +17,10 @@ namespace
 
 FileWebServer::FileWebServer()
     : Configurable()
-    ,mServerIP{"127.0.0.1"}
-    ,mPort{8080}
-    ,mPath{"d://"}
+    , mServerIP{"127.0.0.1"}
+    , mPort{8080}
+    , mPath{"d://"}
+    , mGenerator{nullptr}
 {
 }
 
@@ -28,7 +30,7 @@ FileWebServer::~FileWebServer()
 
 void http_server(boost::asio::ip::tcp::acceptor &acceptor, boost::asio::ip::tcp::socket &socket, const std::string &response_html)
 {
-    acceptor.async_accept(socket, [&](boost::beast::error_code ec)
+    acceptor.async_accept(socket, [&, response_html](boost::beast::error_code ec)
     {
         if (!ec)
         {
@@ -55,7 +57,10 @@ int FileWebServer::run()
 
             std::cout << "Server started on " << mServerIP << ":" << mPort <<std::endl;
             std::cout << "Working directory is a " << mPath <<std::endl;
-            http_server(acceptor, socket, mPath);
+            if(mGenerator)
+            {
+                http_server(acceptor, socket, mGenerator->generate(mPath));
+            }
             ioc.run();
         }
         catch (std::exception const &e)
@@ -78,4 +83,9 @@ void FileWebServer::setConfiguration(Configuration config)
 {
     mPath = config.dir();
     mPort = static_cast<unsigned>(config.port());
+}
+
+void FileWebServer::setGenerator(Generator *generator)
+{
+    mGenerator = generator;
 }

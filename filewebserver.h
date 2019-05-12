@@ -3,6 +3,8 @@
 
 #include "configurable.h"
 
+class Generator;
+
 class FileWebServer : public Configurable
 {
 public:
@@ -15,7 +17,9 @@ public:
 public:
     virtual void setConfiguration(Configuration configuration) override;
 
+    void setGenerator(Generator *generator);
 private:
+    Generator *mGenerator;
     std::string mServerIP;
     unsigned mPort;
     std::string mPath;

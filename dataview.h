@@ -6,8 +6,8 @@ class DataModel;
 class DataView
 {
 public:
+    virtual ~DataView() = default;
     DataView();
-
     DataModel *model() const;
     void setModel(DataModel *model);
 

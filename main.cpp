@@ -15,19 +15,19 @@ int main(int ac, char ** av)
     CommandLineReader reader(ac,av);
     Configuration config = reader.configuration();
 
-//    FileWebServer server;
-//    server.setConfiguration(config);
-//    server.run();
+    FileSystemModel fileSystemModel;
+    fileSystemModel.setConfiguration(config);
+    std::cout << fileSystemModel.rootDir() << std::endl;
 
-    HTMLContentGenerator temp;
-    temp.setConfiguration(config);
-    temp.generate("/");
-    std::cout<< temp.generate("/");
-//    ConfiguratioReader reader;
+    HTMLContentGenerator htmlGenerator;
+    htmlGenerator.setConfiguration(config);
+    htmlGenerator.setModel(&fileSystemModel);
+    //std::cout<<htmlGenerator.generate("/");
 
-//    Configuration c = reader.configuration();
-
-//    FileSystemModel fileSystemModel;
+    FileWebServer server;
+    server.setConfiguration(config);
+    server.setGenerator(&htmlGenerator);
+    server.run();
 
     std::cout << "Hello World!" << std::endl;
     return 0;

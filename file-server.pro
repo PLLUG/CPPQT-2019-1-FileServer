@@ -30,6 +30,8 @@ HEADERS += \
     htmlcontentgenerator.h \
     httpconnection.h
 
+OTHER_FILES += \
+    folder_view.html.mustashe
 
 LIBS += -L/mingw64/lib/ -lwsock32 -lws2_32
 INCLUDEPATH += /mingw64/include/

@@ -23,9 +23,9 @@ public:
     virtual void up() override;
 
     std::string rootDir() const;
-    void setRootDir(const std::string &rootDir);
 
 private:
+    void setRootDir(const std::string &rootDir);
     void enterDirectory(const std::string &path);
 
 private:

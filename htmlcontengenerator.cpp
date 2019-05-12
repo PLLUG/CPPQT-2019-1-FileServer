@@ -1,109 +1,195 @@
 #include "htmlcontentgenerator.h"
+#include "filesystemmodel.h"
 #include <Mustache\mustache.hpp>
 
 //Configuration hTMLGenerator;
 //DataModel item1;
 
+static std::string mustasheTemplate{R"(<!DOCTYPE html>
+                             <html>
+
+                             <head>
+                             <title>FileServer</title>
+                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                             </head>
+
+                             <body>
+                             <p>&nbsp;</p>
+                             <h1>File Server</h1>
+                             <p>&nbsp;</p>
+                             <p>&nbsp;</p>
+
+                             <table style="width:100%">
+                             <tbody>
+                             <tr>
+                             {{#showIcons}}
+                             <td>&nbsp;</td>
+                             {{/showIcons}}
+                             <td><strong>Name</strong></td>
+                             {{#showSize}}
+                             <td><strong>Size</strong></td>
+                             {{/showSize}}
+                             {{#showDetails}}
+                             <td><strong>Information</strong></td>
+                             {{/showDetails}}
+                             </tr>
+
+                             {{#dirEntryList}}
+                             <tr>
+                             {{#showIcons}}
+                             <td>{{{fileIcon}}}</td>
+                             {{/showIcons}}
+                             <td>{{fileName}}</td>
+                             {{#showSize}}
+                             <td>{{fileSize}}</td>
+                             {{/showSize}}
+                             {{#showDetails}}
+                             <td>{{fileDetails}}</td>
+                             {{/showDetails}}
+                             </tr>
+                             {{/dirEntryList}}
+                             </tbody>
+                             </table>
+
+                             <p>&nbsp;</p>
+                             </body>
+                             </html>
+                             )"};
+
+struct FileSystemItems
+{
+    std::string name;
+    bool isFolder;
+};
+
+std::vector<FileSystemItems> fsItemsList = {{"..", false},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"Test Folder", true},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false},
+                                            {"file.txt", false}
+                                           };
+
+HTMLContentGenerator::~HTMLContentGenerator()
+{
+
+}
+
 std::string HTMLContentGenerator::generate(const std::string &path)
 {
-    return std::string();
-//    kainjow::mustache::mustache tmpl{path};
+    //return mustasheTemplate;
+    const bool showIconsColumn = true, showSizeColumn = true, showDetailsConst = true;
+    kainjow::mustache::mustache tmpl{mustasheTemplate};
 
-//    kainjow::mustache::data mustashe{};
-//    mustashe.set("showIcons", hTMLGenerator.isIconColumnVisible() ? kainjow::mustache::data::type::bool_true
-//                                   : kainjow::mustache::data::type::bool_false);
-//    mustashe.set("showSize", hTMLGenerator.isFileSizeColumnVisible() ? kainjow::mustache::data::type::bool_true
-//                                   : kainjow::mustache::data::type::bool_false);
-//    mustashe.set("showDetails", hTMLGenerator.isDetailedInfoColumnVisible() ? kainjow::mustache::data::type::bool_true
-//                                   : kainjow::mustache::data::type::bool_false);
+    kainjow::mustache::data mustashe{};
+    mustashe.set("showIcons", showIconsColumn ? kainjow::mustache::data::type::bool_true
+                                              : kainjow::mustache::data::type::bool_false);
+    mustashe.set("showSize", showSizeColumn ? kainjow::mustache::data::type::bool_true
+                                            : kainjow::mustache::data::type::bool_false);
+    mustashe.set("showDetails", showDetailsConst ? kainjow::mustache::data::type::bool_true
+                                                 : kainjow::mustache::data::type::bool_false);
 
 
-//    kainjow::mustache::data iconsListMustashe{kainjow::mustache::data::type::list};
-//    kainjow::mustache::data fileNamesListMustashe{kainjow::mustache::data::type::list};
-//    kainjow::mustache::data sizesListMustashe{kainjow::mustache::data::type::list};
-//    kainjow::mustache::data detailsListMustashe{kainjow::mustache::data::type::list};
+    kainjow::mustache::data iconsListMustashe{kainjow::mustache::data::type::list};
+    kainjow::mustache::data fileNamesListMustashe{kainjow::mustache::data::type::list};
+    kainjow::mustache::data sizesListMustashe{kainjow::mustache::data::type::list};
+    kainjow::mustache::data detailsListMustashe{kainjow::mustache::data::type::list};
 
-//    kainjow::mustache::data dirEntryListMustashe{kainjow::mustache::data::type::list};
-//    for (const auto &item: hTMLGenerator.dir())
-//    {
-//        kainjow::mustache::data dirEntryMustashe;
+    kainjow::mustache::data dirEntryListMustashe{kainjow::mustache::data::type::list};
+    for (int fileIndex = 0; fileIndex < model()->count();  fileIndex++)
+    {
+        kainjow::mustache::data dirEntryMustashe;
 
-//        dirEntryMustashe.set("showIcons", hTMLGenerator.isIconColumnVisible() ? kainjow::mustache::data::type::bool_true
-//                                       : kainjow::mustache::data::type::bool_false);
+        dirEntryMustashe.set("showIcons", showIconsColumn ? kainjow::mustache::data::type::bool_true
+                                                          : kainjow::mustache::data::type::bool_false);
 
-//        // File Icon
-//        if (hTMLGenerator.isIconColumnVisible())
-//        {
-//            dirEntryMustashe.set("showIcons", kainjow::mustache::data::type::bool_true);
+        // File Icon
+        if (showIconsColumn)
+        {
+            dirEntryMustashe.set("showIcons", kainjow::mustache::data::type::bool_true);
 
-//            if (!item.isFolder)
-//            {
-//                if (item.name != "..")
-//                {
-//                    dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-sticky-note"></i>)");
-//                }
-//                else
-//                {
-//                    dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-level-up"></i>)");
-//                }
-//            }
-//            else
-//            {
-//                dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-folder"></i>)");
-//            }
-//        }
-//        else
-//        {
-//            dirEntryMustashe.set("showIcons", kainjow::mustache::data::type::bool_false);
-//        }
+            if (!model()->isDir(fileIndex))
+            {
+                if (model()->name(fileIndex) != "..")
+                {
+                    dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-sticky-note"></i>)");
+                }
+                else
+                {
+                    dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-level-up"></i>)");
+                }
+            }
+            else
+            {
+                dirEntryMustashe.set("fileIcon", R"(<i class="fa fa-folder"></i>)");
+            }
+        }
+        else
+        {
+            dirEntryMustashe.set("showIcons", kainjow::mustache::data::type::bool_false);
+        }
 
-//        // File Name
-//        dirEntryMustashe.set("fileName", item.name);
+        // File Name
+        dirEntryMustashe.set("fileName", model()->name(fileIndex));
 
-//        // File Size
-//        if (hTMLGenerator.isFileSizeColumnVisible())
-//        {
-//            dirEntryMustashe.set("showSize", kainjow::mustache::data::type::bool_true);
+        // File Size
+        if (showSizeColumn)
+        {
+            dirEntryMustashe.set("showSize", kainjow::mustache::data::type::bool_true);
 
-//            if (!item.isFolder && item.name != "..")
-//            {
-//                dirEntryMustashe.set("fileSize", "1 K");
-//            }
-//            else
-//            {
-//                dirEntryMustashe.set("fileSize", "-");
-//            }
-//        }
-//        else
-//        {
-//            dirEntryMustashe.set("showSize", kainjow::mustache::data::type::bool_false);
-//        }
+            if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
+            {
+                dirEntryMustashe.set("fileSize", "1 K");
+            }
+            else
+            {
+                dirEntryMustashe.set("fileSize", "-");
+            }
+        }
+        else
+        {
+            dirEntryMustashe.set("showSize", kainjow::mustache::data::type::bool_false);
+        }
 
-//        // File details
-//        if (hTMLGenerator.isDetailedInfoColumnVisible())
-//        {
-//            dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_true);
+        // File details
+        if (showDetailsConst)
+        {
+            dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_true);
 
-//            if (!item.isFolder && item.name != "..")
-//            {
-//                dirEntryMustashe.set("fileDetails", "details");
-//            }
-//            else
-//            {
-//                dirEntryMustashe.set("fileDetails", "-");
-//            }
-//        }
-//        else
-//        {
-//            dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_false);
-//        }
+            if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
+            {
+                dirEntryMustashe.set("fileDetails", "details");
+            }
+            else
+            {
+                dirEntryMustashe.set("fileDetails", "-");
+            }
+        }
+        else
+        {
+            dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_false);
+        }
 
-//        dirEntryListMustashe << dirEntryMustashe;
-//    }
+        dirEntryListMustashe << dirEntryMustashe;
+    }
 
-//    mustashe.set("dirEntryList", dirEntryListMustashe);
+    mustashe.set("dirEntryList", dirEntryListMustashe);
 
-    //    return tmpl.render(mustashe);
+    return tmpl.render(mustashe);
+
 }
 
 void HTMLContentGenerator::setConfiguration(Configuration configuration)
