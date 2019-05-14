@@ -53,7 +53,6 @@ CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
             std::string stringReadMe;
             while (!readMeFile.eof())
             {
-                //readMeFile>>stringReadMe;
                 std::getline(readMeFile, stringReadMe);
                 std::cout<<stringReadMe<<std::endl;
             }

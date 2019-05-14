@@ -22,9 +22,12 @@
                              {{#showSize}}
                              <td><strong>Size</strong></td>
                              {{/showSize}}
+
+
                              {{#showDetails}}
                              <td><strong>Information</strong></td>
                              {{/showDetails}}
+
                              </tr>
 
                              {{#dirEntryList}}
@@ -36,14 +39,28 @@
                              {{#showSize}}
                              <td>{{fileSize}}</td>
                              {{/showSize}}
+
                              {{#showDetails}}
-                             <td>{{fileDetails}}</td>
+                             <td> 
+
+					<a href="#" {{colorLink}}  {{hideON}}Click="(function(e){    						
+  					var newWin = window.open('about:blank', 'hello', 'width=300,height=200');
+					newWin.document.write('<html><head><title>{{fName}}</title></head><body><table border=1><tr><td>FileName</td><td>{{fName}}</td></tr>
+									<tr><td>File size link</td><td> {{fSize}} </td></tr>
+									<tr><td>File Download link</td><td>{{downloadLink}}</td></tr>
+									</table></body></html>');
+					return false;
+					})();return false;">Details</a>
+
+					</td>
                              {{/showDetails}}
+
                              </tr>
                              {{/dirEntryList}}
                              </tbody>
                              </table>
 
                              <p>&nbsp;</p>
+					
                              </body>
                              </html>

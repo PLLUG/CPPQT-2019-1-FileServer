@@ -122,51 +122,7 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
             if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
             {
-                int fileSize;
-                fileSize = model()->size(fileIndex);
-                int ab;
-//                ab=fileSize/1024;
-//                std::cout<<"file Index"<<fileIndex<<": "<<(fileSize/1024)<<"  "<<ab<<   std::endl;
-
-                std::string sizeFileString;
-                if (FSizeEnum::BYTES==mFSizeDisplayMode || FSizeEnum::AUTOMATICALLY==mFSizeDisplayMode)
-                {
-                    sizeFileString = std::to_string(fileSize)+" b";
-                }
-                else
-                    if (FSizeEnum::KILOBYTES==mFSizeDisplayMode)
-                    {
-                        if((fileSize/1024)>0)
-                        {
-                            sizeFileString= std::to_string(fileSize/1024)+" Kb";
-
-                        }
-                        else
-                        {
-                            sizeFileString= std::to_string(fileSize)+" b";
-                        }
-                    }
-                if (FSizeEnum::MEGABYTES==mFSizeDisplayMode)
-                {
-                    if((fileSize/1048576)>0)
-                    {
-                        sizeFileString= std::to_string(fileSize/1048576)+" Mb";
-                    }
-                    else
-                    {
-                        if((fileSize/1024)>0)
-                        {
-                            sizeFileString= std::to_string(fileSize/1024)+" Kb";
-                        }
-                        else
-                        {
-                            sizeFileString= std::to_string(fileSize)+" b";
-                        }
-                    }
-                }
-               // sizeFileString= std::to_string(fileSize);
-                //std::cout<<d<<std::endl;
-                dirEntryMustashe.set("fileSize", sizeFileString);
+                dirEntryMustashe.set("fileSize", model()->sizeString(fileIndex));
             }
             else
             {
@@ -179,17 +135,28 @@ std::string HTMLContentGenerator::generate(const std::string &path)
         }
 
         // File details
+
+        //std::string detailsString="details";
+
         if (mShowDetailsConst)
         {
             dirEntryMustashe.set("showDetails", kainjow::mustache::data::type::bool_true);
 
             if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
             {
-                dirEntryMustashe.set("fileDetails", "details");
+                dirEntryMustashe.set("fileDetails", "fileDetails");
+                dirEntryMustashe.set("hideON", "on");
+                //std::string fN=model()->name(fileIndex);
+
+                dirEntryMustashe.set("fName", model()->name(fileIndex));
+                //std::string fS=model()->sizeString(fileIndex);
+                dirEntryMustashe.set("fSize", model()->sizeString(fileIndex));
+
             }
             else
             {
                 dirEntryMustashe.set("fileDetails", "-");
+                dirEntryMustashe.set("colorLink", "style='color:#000000'");
             }
         }
         else

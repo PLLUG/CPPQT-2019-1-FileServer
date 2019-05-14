@@ -12,6 +12,7 @@ public:
 
     virtual std::string name(int index) const = 0;
     virtual int size(int index) const = 0;
+    virtual std::string sizeString(int index) const = 0;
     virtual bool isDir(int index) const = 0;
     virtual void enter(int index) = 0;
 

@@ -5,7 +5,7 @@
 #include "generator.h"
 #include "fsizeenum.h"
 
-class HTMLContentGenerator : public Generator, public Configurable
+class HTMLContentGenerator: public Generator, public Configurable
 {
 private:
     bool mShowIconsColumn;
@@ -14,7 +14,7 @@ private:
     FSizeEnum mFSizeDisplayMode;
 
 public:
-    ~HTMLContentGenerator() override;
+    ~ HTMLContentGenerator() override;
     std::string generate(const std::string &path) override;
 
     // Configurable interface

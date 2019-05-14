@@ -1,10 +1,11 @@
 #include "filesystemmodel.h"
-
+#include <iostream>
 #include <filesystem>
 
 void FileSystemModel::setConfiguration(Configuration configuration)
 {
     setRootDir(configuration.dir());
+    mFSizeDisplayMode=configuration.fsizeDisplayingMode();
 }
 
 int FileSystemModel::count() const
@@ -17,9 +18,52 @@ std::string FileSystemModel::name(int index) const
     return mListFilePathes.at(index);
 }
 
-int FileSystemModel::size(int index) const
+std::string FileSystemModel::sizeString (int index) const
 {
     std::filesystem::path fsPath = mListFilePathes.at(index);
+    int fileSize=std::filesystem::file_size(fsPath);
+    std::string sizeFileString;
+    if (FSizeEnum::BYTES==mFSizeDisplayMode || FSizeEnum::AUTOMATICALLY==mFSizeDisplayMode)
+    {
+        sizeFileString = std::to_string(fileSize)+" b";
+    }
+    else
+        if (FSizeEnum::KILOBYTES==mFSizeDisplayMode)
+        {
+            if((fileSize/1024)>0)
+            {
+                sizeFileString= std::to_string(fileSize/1024)+" Kb";
+
+            }
+            else
+            {
+                sizeFileString= std::to_string(fileSize)+" b";
+            }
+        }
+    if (FSizeEnum::MEGABYTES==mFSizeDisplayMode)
+    {
+        if((fileSize/1048576)>0)
+        {
+            sizeFileString= std::to_string(fileSize/1048576)+" Mb";
+        }
+        else
+        {
+            if((fileSize/1024)>0)
+            {
+                sizeFileString= std::to_string(fileSize/1024)+" Kb";
+            }
+            else
+            {
+                sizeFileString= std::to_string(fileSize)+" b";
+            }
+        }
+    }
+    return sizeFileString;
+}
+
+int FileSystemModel::size(int index) const
+{
+    std::filesystem::path fsPath = mListFilePathes.at(index);        
     return std::filesystem::file_size(fsPath);
 }
 

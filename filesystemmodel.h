@@ -3,6 +3,7 @@
 
 #include "configurable.h"
 #include "datamodel.h"
+#include "fsizeenum.h"
 
 #include <vector>
 
@@ -21,6 +22,7 @@ public:
     virtual bool isDir(int index) const override;
     virtual void enter(int index) override;
     virtual void up() override;
+    virtual std::string sizeString (int index) const override;
 
     std::string rootDir() const;
 
@@ -31,7 +33,7 @@ private:
 private:
     std::string mRootDir;
     std::string mCurrentDir;
-
+    FSizeEnum mFSizeDisplayMode;
     std::vector<std::string> mListFilePathes;
 };
 
