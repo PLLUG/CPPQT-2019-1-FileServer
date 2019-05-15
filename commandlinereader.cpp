@@ -4,24 +4,39 @@
 
 #include <iostream>
 
+#include <fstream>
+
 CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
 {
-    boost::program_options::options_description optionDescriprion("Allowedoptions");
-    optionDescriprion.add_options()
-        ("help", "Produce help message")
-        ("port", boost::program_options::value<int>(), "The TCP/IP port that the server instance should use to connect to clients. The default value is 8080")
-        ("dir",boost::program_options::value<std::string>(),"Root folder that will be available on server. This parameter cannot be ommited and has no default value");
+    boost::program_options::options_description optionDescription("Allowedoptions");
+    optionDescription.add_options()
+            ("config", boost::program_options::value<std::string>(), "Read options from config file config.cfg")
+            ("help", "Produce help message")
+            ("port", boost::program_options::value<int>(), "The TCP/IP port that the server instance should use to connect to clients. The default value is 8080")
+            ("dir",boost::program_options::value<std::string>(),"Root folder that will be available on server. This parameter cannot be ommited and has no default value")
+            ("about", "output README information")
+            ("dpermission", boost::program_options::value<bool>(), "Enable\\disable ability to download files The default value is \"enable\"")
+            ("vicon", boost::program_options::value<bool>(), "Visibility of displaying icon column The default value is \"false\"")
+            ("vsize", boost::program_options::value<bool>(),"Visibility of file size column  The default value is \"false\"")
+            ("vinfo", boost::program_options::value<bool>(),"Visibility of detailed information column The default value is \"false\"")
+            ("fsize", boost::program_options::value<std::string>(), "Specify the file size displaying mode The default value is \"bytes\" \ May take value:  BYTES, KILOBYTES, MEGABYTES, AUTOMATICALLY ");
 
     boost::program_options::variables_map vm;
     boost::program_options::store(boost::program_options::parse_command_line(argumentsCount,
                                                                              argumentList,
-                                                                             optionDescriprion),
+                                                                             optionDescription),
                                   vm);
     boost::program_options::notify(vm);
 
+    if(vm.count("config"))
+    {
+        std::string path=vm["config"].as<std::string>();
+        boost::program_options::store(boost::program_options::parse_config_file(path.c_str(),optionDescription),vm);
+    }
+
     if (vm.count("help"))
     {
-        std::cout << optionDescriprion << std::endl;
+        std::cout << optionDescription << std::endl;
     }
 
     if (vm.count("port"))
@@ -34,6 +49,70 @@ CommandLineReader::CommandLineReader(int argumentsCount, char **argumentList)
         mConfig.setDir(vm["dir"].as<std::string>());
     }
 
+    if (vm.count("about"))
+    {
+        std::string const ReadMePath = "./readme.md";
+
+        std::ifstream readMeFile;
+        readMeFile.open(ReadMePath);
+        if(!readMeFile.is_open())
+        {
+            std::cout<<"file \"readme.md\" not found"<<std::endl;
+        }
+        else
+        {
+            std::string stringReadMe;
+            while (!readMeFile.eof())
+            {
+                //readMeFile>>stringReadMe;
+                std::getline(readMeFile, stringReadMe);
+                std::cout<<stringReadMe<<std::endl;
+            }
+
+        }
+        readMeFile.close();
+    }
+
+    if (vm.count("dpermission"))
+    {
+        mConfig.setIsFileDownloadingEnabled(vm["dpermission"].as<bool>());
+    }
+
+    if (vm.count("vicon"))
+    {
+        mConfig.setIsIconColumnVisible(vm["vicon"].as<bool>());
+    }
+
+    if (vm.count("vsize"))
+    {
+        mConfig.setIsFileSizeColumnVisible(vm["vsize"].as<bool>());
+    }
+
+    if (vm.count("vinfo"))
+    {
+        mConfig.setIsDetailedInfoColumnVisible(vm["vinfo"].as<bool>());
+    }
+
+    if(vm.count("fsize"))
+    {
+        if("BYTES"==vm["fsize"].as<std::string>())
+        {
+            mConfig.setFsizeDisplayingMode(FSizeEnum::BYTES);
+        }
+        else
+            if ("MEGABYTES"==vm["fsize"].as<std::string>())
+            {
+                mConfig.setFsizeDisplayingMode(FSizeEnum::MEGABYTES);
+            }
+            else
+                if ("AUTOMATICALLY"==vm["fsize"].as<std::string>())
+                {
+                    mConfig.setFsizeDisplayingMode(FSizeEnum::AUTOMATICALLY);
+                }
+                else {
+                    mConfig.setFsizeDisplayingMode(FSizeEnum::KILOBYTES);
+                }
+    }
 }
 
 Configuration CommandLineReader::configuration()
