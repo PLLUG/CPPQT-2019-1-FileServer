@@ -23,6 +23,7 @@ public:
     virtual void enter(int index) override;
     virtual void up() override;
     virtual std::string sizeString (int index) const override;
+    virtual std::string fileLastWriteTime(int index) const override;
 
     std::string rootDir() const;
 

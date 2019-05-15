@@ -44,9 +44,12 @@
                              <td> 
 
 					<a href="#" {{colorLink}}  {{hideON}}Click="(function(e){    						
-  					var newWin = window.open('about:blank', 'hello', 'width=300,height=200');
+  					var newWin = window.open('about:blank', 'hello', 'width=400,height=250');
 					newWin.document.write('<html><head><title>{{fName}}</title></head><body><table border=1><tr><td>FileName</td><td>{{fName}}</td></tr>
-									<tr><td>File size link</td><td> {{fSize}} </td></tr>
+									<tr><td>File size </td><td> {{fSize}} </td></tr>
+									<tr><td>Time creation</td><td> {{timeCreation}} </td></tr>
+									<tr><td>Last write time</td><td>{{lastWritetTyime}}</td>
+									</tr><tr><td>MD5</td><td> {{fileMD5}} </td></tr>
 									<tr><td>File Download link</td><td>{{downloadLink}}</td></tr>
 									</table></body></html>');
 					return false;

@@ -1,6 +1,9 @@
 #include "filesystemmodel.h"
 #include <iostream>
 #include <filesystem>
+#include <chrono>
+#include <ctime>
+
 
 void FileSystemModel::setConfiguration(Configuration configuration)
 {
@@ -60,6 +63,16 @@ std::string FileSystemModel::sizeString (int index) const
     }
     return sizeFileString;
 }
+
+std::string FileSystemModel::fileLastWriteTime(int index) const
+{
+    std::filesystem::path fsPath = mListFilePathes.at(index);
+    std::filesystem::file_time_type ftime = std::filesystem::last_write_time(fsPath);
+    std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime);
+    std::string ft=std::asctime(std::localtime(&cftime));
+    ft.erase(ft.size()-1);
+    return ft;
+ }
 
 int FileSystemModel::size(int index) const
 {

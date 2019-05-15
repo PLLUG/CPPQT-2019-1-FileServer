@@ -144,14 +144,11 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
             if (!model()->isDir(fileIndex) && model()->name(fileIndex) != "..")
             {
-                dirEntryMustashe.set("fileDetails", "fileDetails");
-                dirEntryMustashe.set("hideON", "on");
-                //std::string fN=model()->name(fileIndex);
-
-                dirEntryMustashe.set("fName", model()->name(fileIndex));
-                //std::string fS=model()->sizeString(fileIndex);
+                //dirEntryMustashe.set("fileDetails", "fileDetails");
+                dirEntryMustashe.set("hideON", "on");          
+                dirEntryMustashe.set("fName", model()->name(fileIndex));                
                 dirEntryMustashe.set("fSize", model()->sizeString(fileIndex));
-
+                dirEntryMustashe.set("lastWritetTyime", model()->fileLastWriteTime(fileIndex));
             }
             else
             {

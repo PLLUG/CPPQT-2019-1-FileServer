@@ -15,6 +15,7 @@ public:
     virtual std::string sizeString(int index) const = 0;
     virtual bool isDir(int index) const = 0;
     virtual void enter(int index) = 0;
+    virtual std::string fileLastWriteTime (int index) const=0;
 
     virtual void up() = 0;
 };
