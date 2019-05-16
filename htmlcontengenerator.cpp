@@ -39,7 +39,7 @@ static std::string mustasheTemplate{R"(<!DOCTYPE html>
                              {{#showIcons}}
                              <td>{{{fileIcon}}}</td>
                              {{/showIcons}}
-                             <td>{{fileName}}</td>
+                             <td><a href="{{fileIndex}}">{{fileName}}</a></td>
                              {{#showSize}}
                              <td>{{fileSize}}</td>
                              {{/showSize}}
@@ -144,6 +144,8 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
         // File Name
         dirEntryMustashe.set("fileName", model()->name(fileIndex));
+        dirEntryMustashe.set("fileIndex", std::to_string(fileIndex));
+
 
         // File Size
         if (showSizeColumn)
