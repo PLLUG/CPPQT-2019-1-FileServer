@@ -1,56 +1,7 @@
 #include "httpconnection.h"
 #include <iostream>
-static std::string mustasheTemplate{R"(<!DOCTYPE html>
-                             <html>
-
-                             <head>
-                             <title>FileServer</title>
-                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                             </head>
-
-                             <body>
-                             <p>&nbsp;</p>
-                             <h1>File Server</h1>
-                             <p>&nbsp;</p>
-                             <p>&nbsp;</p>
-
-                             <table style="width:100%">
-                             <tbody>
-                             <tr>
-                             {{#showIcons}}
-                             <td>&nbsp;</td>
-                             {{/showIcons}}
-                             <td><strong>Name</strong></td>
-                             {{#showSize}}
-                             <td><strong>Size</strong></td>
-                             {{/showSize}}
-                             {{#showDetails}}
-                             <td><strong>Information</strong></td>
-                             {{/showDetails}}
-                             </tr>
-
-                             {{#dirEntryList}}
-                             <tr>
-                             {{#showIcons}}
-                             <td>{{{fileIcon}}}</td>
-                             {{/showIcons}}
-                             <td>{{fileName}}</td>
-                             {{#showSize}}
-                             <td>{{fileSize}}</td>
-                             {{/showSize}}
-                             {{#showDetails}}
-                             <td>{{fileDetails}}</td>
-                             {{/showDetails}}
-                             </tr>
-                             {{/dirEntryList}}
-                             </tbody>
-                             </table>
-
-                             <p>&nbsp;</p>
-                             </body>
-                             </html>
-                             )"};
-
+#include "filesystemmodel.h"
+#include "htmlcontentgenerator.h"
 
 http_connection::http_connection(boost::asio::ip::tcp::socket socket,
                                  const std::string &response_html)
@@ -65,6 +16,16 @@ void http_connection::start()
 {
     read_request();
     check_deadline();
+}
+
+void http_connection::setFileSystemModel(FileSystemModel *fileSystemModel)
+{
+    mFileSystemModel = fileSystemModel;
+}
+
+void http_connection::setHTMLContentGenerator(Generator *hTMLContentGenerator)
+{
+    mHTMLContentGenerator = hTMLContentGenerator;
 }
 
 void http_connection::set_response(const std::string &_response)
@@ -155,11 +116,14 @@ void http_connection::create_response()
         std::string indexString = request_.target().to_string();
         std::cout<<indexString<<std::endl;
         indexString.erase(0,1);
-        std::cout<<indexString<<std::endl;
+        std::cout<<"string indexString.erase"<<indexString<<std::endl;
         if(indexString.size() != 0)
         {
-            int index = std::stoi(indexString);
-            std::cout<<index<<std::endl;
+            int htmlIndex = std::stoi(indexString);
+            mFileSystemModel->enter(htmlIndex);
+            std::cout<<htmlIndex<<std::endl;
+            response=mHTMLContentGenerator->generate("");
+
         }
 
         response_.result(boost::beast::http::status::not_found);

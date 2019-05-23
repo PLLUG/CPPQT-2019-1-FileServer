@@ -28,16 +28,21 @@ FileWebServer::~FileWebServer()
 {
 }
 
-void http_server(boost::asio::ip::tcp::acceptor &acceptor, boost::asio::ip::tcp::socket &socket, const std::string &response_html)
+void http_server(boost::asio::ip::tcp::acceptor &acceptor, boost::asio::ip::tcp::socket &socket, const std::string &response_html, FileSystemModel &fileSystemModel, Generator &htmlContentGenerator)
 {
     acceptor.async_accept(socket, [&, response_html](boost::beast::error_code ec)
     {
         if (!ec)
         {
-            std::make_shared<http_connection>(std::move(socket), response_html)->start();
+            auto connection=std::make_shared<http_connection>(std::move(socket), response_html);
+            connection->setFileSystemModel(&fileSystemModel);
+            connection->setHTMLContentGenerator(&htmlContentGenerator);
+            connection->start();
+
+
         }
 //        std::cout << "IP address: " << socket.remote_endpoint().address().to_string() << std::endl;
-        http_server(acceptor, socket, response_html);
+        http_server(acceptor, socket, response_html, fileSystemModel, htmlContentGenerator);
     });
 }
 
@@ -59,7 +64,7 @@ int FileWebServer::run()
             std::cout << "Working directory is a " << mPath <<std::endl;
             if(mGenerator)
             {
-                http_server(acceptor, socket, mGenerator->generate(mPath));
+                http_server(acceptor, socket, mGenerator->generate(mPath), *mFileSysemModel, *mGenerator);
             }
             ioc.run();
         }
@@ -88,4 +93,9 @@ void FileWebServer::setConfiguration(Configuration config)
 void FileWebServer::setGenerator(Generator *generator)
 {
     mGenerator = generator;
+}
+
+void FileWebServer::setFileSysemModel(FileSystemModel *fileSysemModel)
+{
+    mFileSysemModel = fileSysemModel;
 }

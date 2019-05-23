@@ -5,6 +5,8 @@
 
 class Generator;
 
+class FileSystemModel;
+
 class FileWebServer : public Configurable
 {
 public:
@@ -18,7 +20,10 @@ public:
     virtual void setConfiguration(Configuration configuration) override;
 
     void setGenerator(Generator *generator);
+    void setFileSysemModel(FileSystemModel *fileSysemModel);
+
 private:
+    FileSystemModel *mFileSysemModel;
     Generator *mGenerator;
     std::string mServerIP;
     unsigned mPort;

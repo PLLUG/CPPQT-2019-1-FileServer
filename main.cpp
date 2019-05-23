@@ -26,6 +26,7 @@ int main(int ac, char ** av)
 
     FileWebServer server;
     server.setConfiguration(config);
+    server.setFileSysemModel(&fileSystemModel);
     server.setGenerator(&htmlGenerator);
     server.run();
 

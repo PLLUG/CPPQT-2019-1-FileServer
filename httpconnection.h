@@ -6,6 +6,9 @@
 #include <boost/beast/http.hpp>
 #include <boost/asio.hpp>
 
+class FileSystemModel;
+class Generator;
+
 class http_connection : public std::enable_shared_from_this<http_connection>
 {
 public:
@@ -15,7 +18,17 @@ public:
     // Initiate the asynchronous operations associated with the connection.
     void start();
 
+
+
+    void setFileSystemModel(FileSystemModel *fileSystemModel);
+
+    void setHTMLContentGenerator(Generator *hTMLContentGenerator);
+
 private:
+    FileSystemModel *mFileSystemModel;
+    Generator *mHTMLContentGenerator;
+
+
     // Response
     std::string response;
 
