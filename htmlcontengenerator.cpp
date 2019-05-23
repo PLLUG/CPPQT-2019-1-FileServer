@@ -6,6 +6,8 @@
 //Configuration hTMLGenerator;
 //DataModel item1;
 
+<<<<<<< HEAD
+
 struct FileSystemItems
 {
     std::string name;
@@ -114,6 +116,8 @@ std::string HTMLContentGenerator::generate(const std::string &path)
 
         // File Name
         dirEntryMustashe.set("fileName", model()->name(fileIndex));
+        dirEntryMustashe.set("fileIndex", std::to_string(fileIndex));
+
 
         // File Size
         if (mShowSizeColumn)

@@ -1,5 +1,5 @@
 #include "httpconnection.h"
-
+#include <iostream>
 static std::string mustasheTemplate{R"(<!DOCTYPE html>
                              <html>
 
@@ -120,6 +120,7 @@ void http_connection::process_request()
 
 void http_connection::create_response()
 {
+    std::cout<<request_.target()<<std::endl;
     if(request_.target() == "/count")
     {
         response_.set(boost::beast::http::field::content_type, "text/html");
@@ -150,6 +151,17 @@ void http_connection::create_response()
     }
     else
     {
+
+        std::string indexString = request_.target().to_string();
+        std::cout<<indexString<<std::endl;
+        indexString.erase(0,1);
+        std::cout<<indexString<<std::endl;
+        if(indexString.size() != 0)
+        {
+            int index = std::stoi(indexString);
+            std::cout<<index<<std::endl;
+        }
+
         response_.result(boost::beast::http::status::not_found);
         response_.set(boost::beast::http::field::content_type, "text/html");
         boost::beast::ostream(response_.body()) << response.c_str(); //"File not found\r\n";
